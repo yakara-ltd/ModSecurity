@@ -548,6 +548,10 @@ static int ngx_http_modsecurity_save_headers_in_visitor(void *data,
     }
 
     ngx_strlow(h->lowcase_key, h->key.data, h->key.len);
+    h->lowcase_key[h->key.len] = '\0';
+
+    if(!ngx_strcmp(h->lowcase_key, "host"))
+      return 1;
 
     h->hash = ngx_hash_key(h->lowcase_key, h->key.len);
 
