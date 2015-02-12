@@ -39,7 +39,7 @@ INCLUDES = -I. -I.. \
            -I$(APACHE)\include
 
 # Enables support for SecRemoteRules and external resources.
-DEFS=$(DEFS) -DWITH_CURL -DWITH_REMOTE_RULES
+DEFS=$(DEFS) -DWITH_CURL -DWITH_REMOTE_RULES -DWITH_APU_CRYPTO
 
 # Lua is optional
 !IF "$(LUA)" != ""

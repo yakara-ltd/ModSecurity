@@ -38,7 +38,7 @@ INCLUDES = -I. -I.. \
            -I..\standalone
 
 # Enables support for SecRemoteRules and external resources.
-DEFS=$(DEFS) -DWITH_CURL -DWITH_REMOTE_RULES
+DEFS=$(DEFS) -DWITH_CURL -DWITH_REMOTE_RULES -DWITH_APU_CRYPTO
 
 #	   -I$(SSDEEP) \
 # Lua is optional
