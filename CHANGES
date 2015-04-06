@@ -3,6 +3,9 @@ DD mmm YYYY - X.Y.Z (To be released)
 
  * Fix invalid storage reference by apr_psprintf at msc_crypt.c
    [Issue #609 - Jeff Trawick]
+ * Fix compilation with Lua 5.3
+   [Issue #837 - Athmane Madjoudj]
+
 
 12 Feb 2015 - 2.9.0
 -------------------
