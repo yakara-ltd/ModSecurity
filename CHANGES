@@ -6,6 +6,10 @@
 03 Feb 2016 - 2.9.1-RC1
 -----------------------
 
+ * Fix the input filter on ModSecurity Standalone. By fixing the input filter
+   ModSecurity is able to perform full inspection of the request body,
+   regardless its size.
+   [Issue #142, #582 and #830 - Andrey Kolganov (KEMP Technologies)]
  * Treat APR_INCOMPLETE as APR_EOF while receiving the request body.
    [Issue #1060, #334 - Alexey Sintsov]
  * Added support to generate audit logs in JSON format.
