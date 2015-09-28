@@ -1,6 +1,8 @@
 DD mmm YYYY - X.Y.Z (To be released)
 ------------------------------------
 
+ * Understands IIS 10 as compatible on Windows installer.
+   [Issue #931 - @skvoboo and ModSecurity team]
  * Fix compilation problem while ssdeep is installed in non-standard
    location.
    [Issude #872 - Kurt Newman]
