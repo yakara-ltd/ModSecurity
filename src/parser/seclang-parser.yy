@@ -54,6 +54,7 @@ class Driver;
 #include "variables/time_wday.h"
 #include "variables/time_year.h"
 #include "variables/tx.h"
+#include "variables/request_uri.h"
 
 using ModSecurity::ModSecurity;
 
@@ -90,6 +91,7 @@ using ModSecurity::Variables::TimeWDay;
 using ModSecurity::Variables::TimeYear;
 using ModSecurity::Variables::Variable;
 using ModSecurity::Variables::Tx;
+using ModSecurity::Variables::RequestURI;
 
 
 #define CHECK_VARIATION_DECL \
@@ -245,6 +247,7 @@ using ModSecurity::Variables::Tx;
 %token <std::string> ACTION_CTL_RULE_ENGINE
 %token <std::string> ACTION_CTL_FORCE_REQ_BODY_VAR
 %token <std::string> CONFIG_SEC_COLLECTION_TIMEOUT
+%token <std::string> REQUEST_URI
 
 %type <std::vector<Action *> *> actions
 %type <std::vector<Variable *> *> variables
@@ -743,6 +746,15 @@ var:
         CHECK_VARIATION(&) { var = new Count(new TimeYear(name)); }
         CHECK_VARIATION(!) { var = new Exclusion(new TimeYear(name)); }
         if (!var) { var = new TimeYear(name); }
+        $$ = var;
+      }
+    | REQUEST_URI
+      {
+        std::string name($1);
+        CHECK_VARIATION_DECL
+        CHECK_VARIATION(&) { var = new Count(new RequestURI(name)); }
+        CHECK_VARIATION(!) { var = new Exclusion(new RequestURI(name)); }
+        if (!var) { var = new RequestURI(name); }
         $$ = var;
       }
     ;

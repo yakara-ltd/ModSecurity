@@ -175,6 +175,7 @@ class Assay {
     std::list<std::pair<int, std::string>> auditLogModifier;
     std::string m_marker;
 
+    const char *m_uri;
  private:
     std::ofstream myfile;
     ModSecurity *m_ms;
@@ -183,7 +184,6 @@ class Assay {
     const char *m_serverIpAddress;
     int m_clientPort;
     int m_serverPort;
-    const char *m_uri;
     std::string m_uri_decoded;
     const char *m_protocol;
     const char *m_httpVersion;
