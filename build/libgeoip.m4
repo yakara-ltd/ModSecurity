@@ -19,7 +19,7 @@ GEOIP_CPPFLAGS=""
 GEOIP_LDADD=""
 GEOIP_LDFLAGS=""
 GEOIP_CONFIG=${PKG_CONFIG}
-GEOIP_PKGNAMES="geoip2 geoip GeoIP libGeoIP"
+GEOIP_PKGNAMES="geoip2 geoip GeoIP"
 GEOIP_SONAMES="so la sl dll dylib"
 
 AC_ARG_WITH(
@@ -32,31 +32,7 @@ AS_CASE(["${with_geoip}"],
   [yes], [test_paths="/usr/local/libgeoip /usr/local/geoip /usr/local /opt/libgeoip /opt/geoip /opt /usr /opt/local/include /opt/local /usr/lib /usr/local/lib /usr/lib64"],
   [test_paths="${with_geoip}"])
 
-AS_IF([test "x${test_paths}" != "x"], [
-AC_MSG_CHECKING([for libgeoip config script])
-for x in ${test_paths}; do
-    dnl # Determine if the script was specified and use it directly
-    if test ! -d "$x" -a -e "$x"; then
-        GEOIP_CONFIG=$x
-        break
-    fi
-
-    dnl # Try known config script names/locations
-    for y in $GEOIP_CONFIG; do
-       if test -e "${x}/bin/${y}"; then
-            GEOIP_CONFIG="${x}/bin/${y}"
-            geoip_config="${GEOIP_CONFIG}"
-            break
-        elif test -e "${x}/${y}"; then
-            GEOIP_CONFIG="${x}/${y}"
-            geoip_config="${GEOIP_CONFIG}"
-            break
-        fi
-    done
-    if test -n "${geoip_config}"; then
-        break
-    fi
-done
+AC_MSG_NOTICE([looking for geoip at: ${test_paths}])
 
 dnl # Try known package names
 if test -n "${GEOIP_CONFIG}"; then
@@ -72,29 +48,38 @@ fi
 if test -n "${GEOIP_PKGNAME}"; then
     AC_MSG_RESULT([${GEOIP_CONFIG}])
     GEOIP_VERSION="`${GEOIP_CONFIG} ${GEOIP_PKGNAME} --modversion`"
-    if test "$verbose_output" -eq 1; then AC_MSG_NOTICE(geoip VERSION: $GEOIP_VERSION); fi
-    GEOIP_CFLAGS="`${GEOIP_CONFIG} ${GEOIP_PKGNAME} --cflags`"
-    if test "$verbose_output" -eq 1; then AC_MSG_NOTICE(geoip CFLAGS: $GEOIP_CFLAGS); fi
-    GEOIP_LDADD="`${GEOIP_CONFIG} ${GEOIP_PKGNAME} --libs-only-l`"
-    if test "$verbose_output" -eq 1; then AC_MSG_NOTICE(geoip LDADD: $GEOIP_LDADD); fi
+    geoip_inc_path="`${GEOIP_CONFIG} ${GEOIP_PKGNAME} --cflags`"
+    geoip_lib_path="`${GEOIP_CONFIG} ${GEOIP_PKGNAME} --libs-only-l`"
     GEOIP_LDFLAGS="`${GEOIP_CONFIG} ${GEOIP_PKGNAME} --libs-only-L --libs-only-other`"
-    if test "$verbose_output" -eq 1; then AC_MSG_NOTICE(geoip LDFLAGS: $GEOIP_LDFLAGS); fi
-else
-    AC_MSG_RESULT([no])
+fi
 
     dnl Hack to just try to find the lib and include
     AC_MSG_CHECKING([for geoip install])
     for x in ${test_paths}; do
         for y in ${GEOIP_SONAMES}; do
-      	    for z in ${GEOIP_PKGNAMES}; do
-               if test -e "${x}/${z}.${y}"; then
-                   geoip_lib_path="${x}/"
+           for z in ${GEOIP_PKGNAMES}; do
+               if test -e "${x}/lib/lib${z}.${y}"; then
+                   geoip_lib_path="${x}/lib/"
                    geoip_lib_name="${z}"
+                   geoip_lib_file="${x}/lib/${z}.${y}"
+                   break
+               fi
+               if test -e "${x}/lib/${z}.${y}"; then
+                   geoip_lib_path="${x}/lib/"
+                   geoip_lib_name="${z}"
+                   geoip_lib_file="${x}/lib/${z}.${y}"
                    break
                fi
                if test -e "${x}/lib${z}.${y}"; then
                    geoip_lib_path="${x}/"
                    geoip_lib_name="${z}"
+                   geoip_lib_file="${x}/lib/${z}.${y}"
+                   break
+               fi
+               if test -e "${x}/${z}.${y}"; then
+                   geoip_lib_path="${x}/"
+                   geoip_lib_name="${z}"
+                   geoip_lib_file="${x}/lib/${z}.${y}"
                    break
                fi
             done
@@ -114,34 +99,18 @@ else
             geoip_inc_path="${x}"
             break
         fi
-
-        dnl # Check some sub-paths as well
-        for geoip_pkg_name in ${geoip_lib_name} ${GEOIP_PKGNAMES}; do
-            if test -e "${x}/include/${geoip_pkg_name}/GeoIPCity.h"; then
-                geoip_inc_path="${x}/include"
-                break
-            elif test -e "${x}/${geoip_pkg_name}/GeoIPCity.h"; then
-                geoip_inc_path="${x}"
-                break
-            else
-                geoip_inc_path=""
-            fi
-        done
-        if test -n "$geoip_inc_path"; then
-            break
-        fi
     done
-    if test -n "${geoip_lib_path}" -a -n "${geoip_inc_path}"; then
-        GEOIP_CONFIG=""
-        AC_MSG_RESULT([${geoip_lib_path} ${geoip_inc_path}])
-        GEOIP_VERSION="2"
-        GEOIP_CFLAGS="-I${geoip_inc_path}"
-        GEOIP_LDADD="-l${geoip_lib_name}"
-        GEOIP_LDFLAGS="-L${geoip_lib_path}"
-    else
-        GEOIP_VERSION=""
-        AC_MSG_RESULT([no])
-    fi
+
+if test -n "${geoip_lib_path}" -a -n "${geoip_inc_path}"; then
+    GEOIP_CONFIG=""
+    AC_MSG_RESULT([${geoip_lib_path} ${geoip_inc_path}])
+    GEOIP_VERSION="2"
+    GEOIP_CFLAGS="-I${geoip_inc_path}"
+    GEOIP_LDADD="-l${geoip_lib_name}"
+    GEOIP_LDFLAGS="-L${geoip_lib_path}"
+else
+    GEOIP_VERSION=""
+    AC_MSG_RESULT([no])
 fi
 
 ])
