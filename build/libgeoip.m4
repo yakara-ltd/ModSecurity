@@ -18,7 +18,6 @@ GEOIP_CFLAGS=""
 GEOIP_CPPFLAGS=""
 GEOIP_LDADD=""
 GEOIP_LDFLAGS=""
-GEOIP_CONFIG=${PKG_CONFIG}
 GEOIP_PKGNAMES="geoip2 geoip GeoIP"
 GEOIP_SONAMES="so la sl dll dylib"
 
@@ -33,25 +32,6 @@ AS_CASE(["${with_geoip}"],
   [test_paths="${with_geoip}"])
 
 AC_MSG_NOTICE([looking for geoip at: ${test_paths}])
-
-dnl # Try known package names
-if test -n "${GEOIP_CONFIG}"; then
-    GEOIP_PKGNAME=""
-    for x in ${GEOIP_PKGNAMES}; do
-        if ${GEOIP_CONFIG} --exists ${x}; then
-            GEOIP_PKGNAME="$x"
-            break
-        fi
-    done
-fi
-
-if test -n "${GEOIP_PKGNAME}"; then
-    AC_MSG_RESULT([${GEOIP_CONFIG}])
-    GEOIP_VERSION="`${GEOIP_CONFIG} ${GEOIP_PKGNAME} --modversion`"
-    geoip_inc_path="`${GEOIP_CONFIG} ${GEOIP_PKGNAME} --cflags`"
-    geoip_lib_path="`${GEOIP_CONFIG} ${GEOIP_PKGNAME} --libs-only-l`"
-    GEOIP_LDFLAGS="`${GEOIP_CONFIG} ${GEOIP_PKGNAME} --libs-only-L --libs-only-other`"
-fi
 
     dnl Hack to just try to find the lib and include
     AC_MSG_CHECKING([for geoip install])
@@ -113,14 +93,12 @@ else
     AC_MSG_RESULT([no])
 fi
 
-])
-
-GEOIP_LIBS=${GEOIP_LDADD}
 AC_SUBST(GEOIP_CFLAGS)
 AC_SUBST(GEOIP_VERSION)
 AC_SUBST(GEOIP_LDADD)
 AC_SUBST(GEOIP_LIBS)
 AC_SUBST(GEOIP_LDFLAGS)
+
     if test -z "${GEOIP_VERSION}"; then
       ifelse([$2], , AC_MSG_ERROR([*** geoip library not found]), $2)
     else
