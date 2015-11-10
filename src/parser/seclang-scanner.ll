@@ -113,6 +113,7 @@ VARIABLE (?i:(ARGS_COMBINED_SIZE|ARGS_GET_NAMES|ARGS_POST_NAMES|FILES_COMBINED_S
 VARIABLE_COL (?i:(ARGS|FILES_SIZES|FILES_NAMES|FILES_TMP_CONTENT|MULTIPART_FILENAME|MULTIPART_NAME|MATCHED_VARS_NAMES|MATCHED_VARS|FILES|QUERY_STRING|REQUEST_COOKIES|REQUEST_HEADERS|RESPONSE_HEADERS|GEO|IP|XML|REQUEST_COOKIES_NAMES))
 
 REQUEST_URI (?i:(REQUEST_URI))
+REQUEST_URI_DECODED (?i:(REQUEST_URI_DECODED))
 VARIABLE_TX (?i:TX)
 RUN_TIME_VAR_DUR  (?i:DURATION)
 RUN_TIME_VAR_ENV  (?i:ENV)
@@ -210,6 +211,8 @@ CONFIG_DIR_UNICODE_MAP_FILE (?i:SecUnicodeMapFile)
 [!&]?{VARIABLE_COL}(\:{DICT_ELEMENT})?    { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_VARIABLE_COL(yytext, *driver.loc.back()); }
 [!&]?{VARIABLE_TX}(\:{DICT_ELEMENT})?     { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_VARIABLE_TX(yytext, *driver.loc.back()); }
 [!&]?{REQUEST_URI}     { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_REQUEST_URI(yytext, *driver.loc.back()); }
+[!&]?{REQUEST_URI_DECODED}     { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_REQUEST_URI_DECODED(yytext, *driver.loc.back()); }
+
 [!&]?{RUN_TIME_VAR_DUR}                      { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_RUN_TIME_VAR_DUR(yytext, *driver.loc.back()); }
 [!&]?{RUN_TIME_VAR_ENV}(\:{DICT_ELEMENT})?     { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_RUN_TIME_VAR_ENV(yytext, *driver.loc.back()); }
 [!&]?{RUN_TIME_VAR_BLD}                      { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_RUN_TIME_VAR_BLD(yytext, *driver.loc.back()); }
@@ -221,6 +224,7 @@ CONFIG_DIR_UNICODE_MAP_FILE (?i:SecUnicodeMapFile)
 ["][!&]?{VARIABLE_TX}(\:{DICT_ELEMENT})?  { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_VARIABLE_TX(yytext, *driver.loc.back()); }
 ["][!&]?{VARIABLE_COL}(\:{DICT_ELEMENT})? { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_VARIABLE_COL(yytext, *driver.loc.back()); }
 ["][!&]?{REQUEST_URI}  { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_REQUEST_URI(yytext, *driver.loc.back()); }
+["][!&]?{REQUEST_URI_DECODED}  { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_REQUEST_URI_DECODED(yytext, *driver.loc.back()); }
 
 ["][!&]?{RUN_TIME_VAR_DUR}["]                      { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_RUN_TIME_VAR_DUR(yytext, *driver.loc.back()); }
 ["][!&]?{RUN_TIME_VAR_ENV}(\:{DICT_ELEMENT})?["]     { BEGIN(EXPECTING_OPERATOR); return yy::seclang_parser::make_RUN_TIME_VAR_ENV(yytext, *driver.loc.back()); }

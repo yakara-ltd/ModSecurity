@@ -57,6 +57,7 @@ VARIABLES = \
 	variables/tx.cc \
 	variables/variable.cc \
 	variables/request_uri.cc \
+	variables/request_uri_decoded.cc \
 	variables/variations/count.cc \
 	variables/variations/exclusion.cc
 

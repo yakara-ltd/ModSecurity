@@ -176,6 +176,7 @@ class Assay {
     std::string m_marker;
 
     const char *m_uri;
+    std::string m_uri_decoded;
  private:
     std::ofstream myfile;
     ModSecurity *m_ms;
@@ -184,7 +185,6 @@ class Assay {
     const char *m_serverIpAddress;
     int m_clientPort;
     int m_serverPort;
-    std::string m_uri_decoded;
     const char *m_protocol;
     const char *m_httpVersion;
 
