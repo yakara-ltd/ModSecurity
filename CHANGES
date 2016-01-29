@@ -6,6 +6,8 @@
 03 Feb 2016 - 2.9.1-RC1
 -----------------------
 
+ * Treat APR_INCOMPLETE as APR_EOF while receiving the request body.
+   [Issue #1060, #334 - Alexey Sintsov]
  * Added support to generate audit logs in JSON format.
    [Issue #914, #897, #656 - Robert Paprocki]
  * Creating AuditLog serial file (or parallel index) respecting the
