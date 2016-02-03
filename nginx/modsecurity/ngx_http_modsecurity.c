@@ -541,7 +541,7 @@ static int ngx_http_modsecurity_save_headers_in_visitor(void *data,
     h->value.data = (u_char *)value;
     h->value.len = ngx_strlen(value);
 
-    h->lowcase_key = ngx_pnalloc(r->pool, h->key.len);
+    h->lowcase_key = ngx_pnalloc(r->pool, h->key.len + 1);
 
     if (h->lowcase_key == NULL) {
         return 0;
