@@ -1,3 +1,10 @@
+09 Mar 2016 - 2.9.1
+-------------------
+
+  * Avoid to save double client entry on logs
+    [Issue #840, #1073 - @lifeforms, @dune73, @zimmerle, @MichaelHaas,
+                         @bazzadp]
+
 03 Feb 2016 - 2.9.1-RC1
 -----------------------
 
